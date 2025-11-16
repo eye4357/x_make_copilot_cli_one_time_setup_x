@@ -299,7 +299,7 @@ def main() -> int:
         result = x_cls_make_copilot_cli_one_time_setup_x().run(request)
         print(json.dumps(result, indent=2))
         return 0 if result.get("status") != "probe_failed" else 1
-    except SystemExit as exc:  # propagate explicit exits
+    except SystemExit:  # propagate explicit exits
         raise
     except Exception as exc:  # pragma: no cover - defensive logging
         error_payload = {
