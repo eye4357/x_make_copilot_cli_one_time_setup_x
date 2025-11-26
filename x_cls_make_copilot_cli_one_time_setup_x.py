@@ -135,12 +135,16 @@ def _run_probe(env: Mapping[str, str], *, timeout: float) -> ProbeResult:
         )
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout or ""
-        stderr = exc.stderr or "Probe timed out (Copilot CLI likely awaits trust or /login)."
+        stderr = (
+            exc.stderr or "Probe timed out (Copilot CLI likely awaits trust or /login)."
+        )
         if isinstance(stdout, bytes):  # pragma: no cover - defensive
             stdout = stdout.decode("utf-8", "replace")
         if isinstance(stderr, bytes):  # pragma: no cover - defensive
             stderr = stderr.decode("utf-8", "replace")
-        return ProbeResult(returncode=None, stdout=stdout, stderr=stderr, timed_out=True)
+        return ProbeResult(
+            returncode=None, stdout=stdout, stderr=stderr, timed_out=True
+        )
     else:
         return ProbeResult(
             returncode=completed.returncode,
@@ -249,9 +253,7 @@ class x_cls_make_copilot_cli_one_time_setup_x:  # noqa: N801 - legacy public API
             return result
 
         if probe.returncode == 0 and not stdout:
-            message = (
-                "Copilot CLI returned no output. Launch `copilot`, approve folder trust, then run `/login` once."
-            )
+            message = "Copilot CLI returned no output. Launch `copilot`, approve folder trust, then run `/login` once."
             result.update(
                 {
                     "status": "needs_login",
